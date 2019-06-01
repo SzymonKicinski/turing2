@@ -1,0 +1,107 @@
+<!--The content below is only a placeholder and can be replaced.-->
+<div style="text-align:center">
+  <h1>
+    Welcome to {{ title }}!
+  </h1>
+  <div #menu style="width: auto; height: 150px; background-color: aquamarine">
+    <div class="container">
+      <div class="notification">
+        <input #word class="input" type="text" placeholder="Insert text" [value]="word"
+          style="width: 120px; height: 40px; text-align: left">
+        Insert a word exp.<strong>"abba"</strong>.
+      </div>
+    </div>
+  </div>
+  <div>
+    <!-- <div class="ui-g-2" style="display: inline-block !important">
+      <span *ngFor="let sign of displayAlphabet.letter">
+        <h2><strong>{{sign}}</strong></h2>
+      </span>
+    </div> -->
+    <div class="ui-g-12" style="display: inline-block !important">
+      <table class="table" id="or-table" #tref>
+        <thead>
+          <tr>
+            <th>
+              <abbr title="Sign no.">Sign:</abbr>
+            </th>
+            <ng-container *ngFor="let header of stateColumn; let i=index">
+              <th>
+                <abbr id="{{i}}" title="State no.">Q: {{header}}</abbr>
+              </th>
+            </ng-container>
+          </tr>
+        </thead>
+        <tfoot>
+          <tr>
+            <th>
+              <abbr title="Sign no.">Sign:</abbr>
+            </th>
+            <ng-container *ngFor="let header of stateColumn; let i=index">
+              <th>
+                <abbr id="{{i}}" title="State no.">{{header}}</abbr>
+              </th>
+            </ng-container>
+          </tr>
+        </tfoot>
+        <tbody>
+          <!-- <span *ngFor="let q of stateColumn"> -->
+          <!-- 
+        <ng-container *ngFor="let state of initTestTabelMT; let i=index">
+          <ng-container *ngFor="let column of stateColumn;let colum=index"> -->
+          <tr *ngFor="let stateObject of initTestTabelMT; let y=index;">
+            <td style="text-align: center; padding-top: 30px">
+                <h2><strong>{{displayAlphabet.letter[y]}}</strong></h2>
+            </td>
+            <td *ngFor="let s of stateObject | keyvalue; let x=index;" [ngClass]="{
+                'move':s.value.activeState === true
+              }">
+              <div [style.background-color]="getBackgroundColor(false)">
+                <!-- <input [ngClass]="{
+                    'move':s.value.activeState === true
+                  }" type="text" placeholder="Insert state" value="{{s.value.state}}"
+                style="width: 70px; height: 30px;"> -->
+                <div>
+                  <span class="tag is-Primary" style="width: 40px"><strong>State:</strong></span>
+                  <input [ngClass]="{
+                                    'moveNow':s.value.activeNow === true
+                                  }" type="text" placeholder="Insert state" value="{{s.value.nextState}}"
+                    style="width: 30px; height: 30px;">
+                </div>
+                <div>
+                  <span class="tag is-Primary" style="width: 40px"><strong>Value:</strong></span>
+                  <input [ngClass]="{
+                                    'moveNow':s.value.activeNow === true
+                                  }" type="text" placeholder="Insert state" value="{{s.value.valueState}}"
+                    style="width: 30px; height: 30px;">
+                </div>
+
+                <div>
+                  <span class="tag is-Primary" style="width: 40px"><strong>Move:</strong></span>
+                  <input [ngClass]="{
+                                    'moveNow':s.value.activeNow === true
+                                  }" type="text" placeholder="Insert state" value="{{s.value.moveState}}"
+                    style="width: 30px; height: 30px;">
+                </div>
+
+
+              </div>
+            </td>
+          </tr>
+          <!-- </ng-container>
+        </ng-container> class="input {{setBackgroundColorValue}}" -->
+          <!-- </span> -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+<div #sendTheTabel class="contorl">
+  <button class="button is-primary" (click)="isPalindrom()">Submit</button>
+</div>
+
+
+
+
+
+<router-outlet></router-outlet>

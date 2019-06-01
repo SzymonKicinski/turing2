@@ -14,9 +14,11 @@ import { preserveWhitespacesDefault } from '@angular/compiler';
 export class AppComponent implements OnInit, AfterViewInit, AfterContentInit {
   blogPostSearchResults = [{}];
   initTestTabelMT = [];
+  didWasDone: boolean;
 
-  or = document.getElementById('or-table');
-  // @ViewChild('tref', { read: ElementRef }) tref: ElementRef;
+  // Word
+  copyOfWord = '';
+  wordToCheck = '';
 
   constructor() {
     this.displayAlphabet.letter = this.alfabet.split('');
@@ -40,6 +42,7 @@ export class AppComponent implements OnInit, AfterViewInit, AfterContentInit {
     { state: 'q3', stateValue: 'q5/a/P' },
   ];
 
+
   initStateListJSON = [
   ];
 
@@ -55,9 +58,8 @@ export class AppComponent implements OnInit, AfterViewInit, AfterContentInit {
 
   // Number of State
   numberOfState = new Array();
-  valueNumberOfState = 4;
+  valueNumberOfState = 6;
 
-  wordToCheck = '';
 
   // Empty sign
   emptySign = '#';
@@ -70,28 +72,197 @@ export class AppComponent implements OnInit, AfterViewInit, AfterContentInit {
     null
   );
 
+  // Example
+  palindromTabelExample = [
+    {
+      0: {
+        activeState: false,
+        nextState: 7,
+        moveState: 'P',
+        valueState: '#',
+        activeNow: false
+      },
+      1: {
+        activeState: false,
+        nextState: 2,
+        moveState: 'L',
+        valueState: '#',
+        activeNow: false
+      },
+      2: {
+        activeState: false,
+        nextState: 7,
+        moveState: '-',
+        valueState: '#',
+        activeNow: false
+      },
+      3: {
+        activeState: false,
+        nextState: 0,
+        moveState: 'L',
+        valueState: '#',
+        activeNow: false
+      },
+      4: {
+        activeState: false,
+        nextState: 5,
+        moveState: 'L',
+        valueState: '#',
+        activeNow: false
+      },
+      5: {
+        activeState: false,
+        nextState: 7,
+        moveState: '-',
+        valueState: '#',
+        activeNow: false
+      },
+      6: {
+        activeState: false,
+        nextState: 6,
+        moveState: '-',
+        valueState: 'A',
+        activeNow: false
+      },
+      7: {
+        activeState: false,
+        nextState: 7,
+        moveState: '-',
+        valueState: 'N',
+        activeNow: false
+      }
+    },
+    {
+      0: {
+        activeState: false,
+        nextState: 1,
+        moveState: 'P',
+        valueState: '#',
+        activeNow: false
+      },
+      1: {
+        activeState: false,
+        nextState: 1,
+        moveState: 'P',
+        valueState: 'a',
+        activeNow: false
+      },
+      2: {
+        activeState: false,
+        nextState: 3,
+        moveState: 'L',
+        valueState: '#',
+        activeNow: false
+      },
+      3: {
+        activeState: false,
+        nextState: 3,
+        moveState: 'L',
+        valueState: 'a',
+        activeNow: false
+      },
+      4: {
+        activeState: false,
+        nextState: 4,
+        moveState: '{',
+        valueState: 'a',
+        activeNow: false
+      },
+      5: {
+        activeState: false,
+        nextState: 6,
+        moveState: '-',
+        valueState: 'a',
+        activeNow: false
+      },
+      6: {
+        activeState: false,
+        nextState: 6,
+        moveState: '-',
+        valueState: 'A',
+        activeNow: false
+      },
+      7: {
+        activeState: false,
+        nextState: 7,
+        moveState: '-',
+        valueState: 'N',
+        activeNow: false
+      }
+    },
+    {
+      0: {
+        activeState: false,
+        nextState: 4,
+        moveState: 'P',
+        valueState: '#',
+        activeNow: false
+      },
+      1: {
+        activeState: false,
+        nextState: 1,
+        moveState: 'P',
+        valueState: 'b',
+        activeNow: false
+      },
+      2: {
+        activeState: false,
+        nextState: 6,
+        moveState: '-',
+        valueState: 'b',
+        activeNow: false
+      },
+      3: {
+        activeState: false,
+        nextState: 3,
+        moveState: 'L',
+        valueState: 'b',
+        activeNow: false
+      },
+      4: {
+        activeState: false,
+        nextState: 4,
+        moveState: 'P',
+        valueState: 'b',
+        activeNow: false
+      },
+      5: {
+        activeState: false,
+        nextState: 3,
+        moveState: 'L',
+        valueState: '#',
+        activeNow: false
+      },
+      6: {
+        activeState: false,
+        nextState: 6,
+        moveState: '-',
+        valueState: 'A',
+        activeNow: false
+      },
+      7: {
+        activeState: false,
+        nextState: 7,
+        moveState: '-',
+        valueState: 'N',
+        activeNow: false
+      }
+    }
+  ];
+
   ngAfterViewInit(): void {
     // console.log(this.tref.nativeElement.textContent);
   }
 
   ngOnInit(): void {
+    this.didWasDone = true;
     this.MoveState = [
       { label: 'P', value: 'P' },
       { label: 'L', value: 'L' },
       { label: '#', value: '#' },
     ];
     this.initializerOfTableState();
-
-    for (let i = 0; i <= this.displayAlphabet.letter.length; i++) {
-      this.ValueState.push(
-        {
-          label: `${this.displayAlphabet.letter[i]}`,
-          value: `${this.displayAlphabet.letter[i]}`
-        }
-      );
-      // Set a number of state
-      this.numberOfState.push(i);
-    }
+    this.createDisplayAlphabet();
 
     // For test no.1
     // let object = 0;
@@ -114,17 +285,17 @@ export class AppComponent implements OnInit, AfterViewInit, AfterContentInit {
     //   console.log(this.tableState);
     // });
     // object = 0;
+    this.didWasDone = false;
   }
 
+
   ngAfterContentInit(): void {
-    this.alfabet = this.wordToCheck;
-    this.displayAlphabet.letter = this.alfabet.split('');
-    this.initializerOfTableState();
+
   }
 
   isPalindrom() {
-    // this.tableState
     debugger;
+    this.copyOfWord = this.wordToCheck;
     // Check first sign
     // this.word.charAt(0);
 
@@ -147,13 +318,14 @@ export class AppComponent implements OnInit, AfterViewInit, AfterContentInit {
 
     // Creating an object to the tabel
     // debugger;
+    this.initTestTabelMT = [];
     for (let state = 0; state < this.displayAlphabet.letter.length; state++) {
       this.initTestTabelMT.push({});
     }
     // debugger;
     console.log(this.initTestTabelMT);
     this.initTestTabelMT.forEach(item => {
-      for (let propert = 0; propert <= this.valueNumberOfState; ++propert) {
+      for (let propert = 0; propert <= +this.valueNumberOfState; ++propert) {
         item[`${propert}`] = ({
           // state: `q${propert}/a/P`,
           activeState: true,
@@ -162,7 +334,7 @@ export class AppComponent implements OnInit, AfterViewInit, AfterContentInit {
           moveState: 'P',
           activeNow: false
         });
-        if (propert === this.valueNumberOfState) {
+        if (propert === +this.valueNumberOfState) {
           // item[`${propert}`] = `q${propert + 1}/A/#`;
           item[`${propert}`] = ({
             activeState: false,
@@ -172,7 +344,7 @@ export class AppComponent implements OnInit, AfterViewInit, AfterContentInit {
             activeNow: true
           });
           // item[`${propert + 1}`] =  `q${propert + 2}/N/#`;
-          item[`${propert + 1}`] =  ({
+          item[`${propert + 1}`] = ({
             activeState: false,
             nextState: propert,
             valueState: '#',
@@ -185,15 +357,13 @@ export class AppComponent implements OnInit, AfterViewInit, AfterContentInit {
     });
     console.log(`this.initTestTabelMT!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!`);
     console.log(this.initTestTabelMT);
-    // Columns
-    for (let column = 0; column <= this.valueNumberOfState + 1; column++) {
-      // this.stateColumn[column] = {
-      //   state: column
-      // };
-      this.stateColumn[column] = column.toString();
+    console.log('this.palindromTabelExample#######################################################');
+    console.log(this.palindromTabelExample);
+    if (+this.valueNumberOfState) {
+      this.createColumnsForState();
+    } else {
+      alert('The number of state it isnt the number!');
     }
-    console.log(`this.stateColumn`);
-    console.log(this.stateColumn);
   }
 
 
@@ -203,6 +373,53 @@ export class AppComponent implements OnInit, AfterViewInit, AfterContentInit {
     } else {
       return this.setBackgroundColorValue = '';
     }
+  }
+
+  // Alphabet
+  createDisplayAlphabet(): any {
+    this.numberOfState = new Array();
+    for (let i = 0; i <= this.displayAlphabet.letter.length; i++) {
+      this.ValueState.push(
+        {
+          label: `${this.displayAlphabet.letter[i]}`,
+          value: `${this.displayAlphabet.letter[i]}`
+        }
+      );
+      // Set a number of state
+      this.numberOfState.push(i);
+    }
+    if (this.alfabet.indexOf('#', 0) === 0) {
+      if (this.alfabet.includes('#')) {
+        this.displayAlphabet.letter = this.alfabet.split('');
+        if (this.didWasDone === false) {
+          this.initializerOfTableState();
+        }
+      } else {
+        alert('Brak symbolu pustego "#"');
+      }
+    } else {
+      alert('Brak symbolu pustego na pierwszej pozycji "#"');
+    }
+  }
+
+  // Columns of State
+  createColumnsForState() {
+    // Columns
+    if (+this.valueNumberOfState) {
+      this.stateColumn = [];
+      for (let column = 0; column <= +this.valueNumberOfState + 1; column++) {
+        // this.stateColumn[column] = {
+        //   state: column
+        // };
+        this.stateColumn[column] = column.toString();
+      }
+      console.log(`this.stateColumn`);
+      console.log(this.stateColumn);
+    } else {
+      alert('The number of state it isnt the number!');
+    }
+
+
   }
 }
 

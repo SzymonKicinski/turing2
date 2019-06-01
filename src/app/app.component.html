@@ -5,15 +5,31 @@
   </h1>
   <div #menu style="width: auto; height: 150px; background-color: aquamarine">
     <div class="container">
-      <div class="">
-        <input #word class="input" type="text" placeholder="Insert text" [(ngModel)]="wordToCheck"
-          style="width: 120px; height: 40px; text-align: left">
-        Insert a word exp.<strong>"abba"</strong>.
+      <div class="is-widescreen">
+        <a class="button is-white" (click)="createDisplayAlphabet()">Insert</a>
+        <input #word class="input" type="text" placeholder="Insert alphabet" [(ngModel)]="alfabet"
+          style="width: 120px; height: auto; text-align: left">
+        Insert the alphabet (exp.<strong>"abba"</strong>).
       </div>
-      <div class="">
-        <input #word class="input" type="text" placeholder="Insert text" [(ngModel)]="wordToCheck"
+
+      <div class="is-widescreen">
+        <a class="button is-white" (click)="createDisplayAlphabet()">Insert</a>
+        <input #word class="input" type="text" placeholder="Vaule of state" [(ngModel)]="valueNumberOfState"
           style="width: 120px; height: 40px; text-align: left">
-        Insert a number of state exp.<strong>"5"</strong>.
+        Insert the number of state (exp.<strong>"5"</strong>).
+      </div>
+
+      <div class="is-widescreen">
+        <a class="button is-white" (click)="isPalindrom()">Insert</a>
+        <input #word class="input" type="text" placeholder="Insert word" [(ngModel)]="wordToCheck"
+          style="width: 120px; height: 40px; text-align: left">
+        Insert the word to check if it's a palindrome (exp.<strong>"abba"</strong>).
+      </div>
+
+      <div class="is-widescreen">
+        <input disabled #word class="input" type="text" placeholder="Word" [(ngModel)]="copyOfWord"
+          style="width: 120px; height: 40px; text-align: left">
+        <strong>The word to checking if it's the palindrome</strong>.
       </div>
     </div>
   </div>
@@ -54,7 +70,7 @@
           <!-- 
         <ng-container *ngFor="let state of initTestTabelMT; let i=index">
           <ng-container *ngFor="let column of stateColumn;let colum=index"> -->
-          <tr *ngFor="let stateObject of initTestTabelMT; let y=index;">
+          <tr *ngFor="let stateObject of palindromTabelExample; let y=index;">
             <td style="text-align: center; padding-top: 30px">
                 <h2><strong>{{displayAlphabet.letter[y]}}</strong></h2>
             </td>

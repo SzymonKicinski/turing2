@@ -298,6 +298,14 @@ export class AppComponent implements OnInit, AfterViewInit, AfterContentInit {
     this.copyOfWord = this.wordToCheck;
     // Check first sign
     // this.word.charAt(0);
+    for (let object = 0; object < this.palindromTabelExample.length; object++) {
+      for (let state = 0; state < this.palindromTabelExample.length; state++) {
+        let mark = this.checkTheCurrentMark(object, state);
+      }
+      // sign = this.wordToCheck.charAt(wordSign);
+      // this.setTrueOnOneActiveState(wordSign, 1);
+      // this.setEmptySignInASpecificPlace(0);
+    }
 
     // for (let c = this.word.length; c >= 0; c--) {
     //   // Dupa
@@ -305,12 +313,53 @@ export class AppComponent implements OnInit, AfterViewInit, AfterContentInit {
 
   }
 
-  getBackgroundColor(currentSignInCurrentState: boolean) {
-    if (currentSignInCurrentState) {
-      return 'yellow';
-    } else {
-      return 'white';
+  setFalseOnAllActiveState() {
+    for (let object = 0; object < this.palindromTabelExample.length; object++) {
+      for (let state = 0; state < this.stateColumn.length; state++) {
+        this.palindromTabelExample[object][state].activeState = false;
+      }
     }
+  }
+
+  setFalseOnAllActiveNow() {
+    for (let object = 0; object < this.palindromTabelExample.length; object++) {
+      for (let state = 0; state < this.stateColumn.length; state++) {
+        this.palindromTabelExample[object][state].activeNow = false;
+      }
+    }
+  }
+
+  setFalseOnOneActiveNow(numberObject, numberState) {
+    this.palindromTabelExample[numberObject][numberState].activeNow = false;
+  }
+
+  setFalseOnOneActiveState(numberState) {
+    for (let set = 0; set < this.palindromTabelExample.length; set++) {
+      this.palindromTabelExample[set][numberState].activeState = false;
+    }
+  }
+
+  setTrueOnOneActiveNow(numberObject, numberState) {
+    this.palindromTabelExample[numberObject][numberState].activeNow = true;
+  }
+
+  setTrueOnOneActiveState(numberState) {
+    for (let set = 0; set < this.palindromTabelExample.length; set++) {
+      this.palindromTabelExample[set][numberState].activeState = true;
+    }
+  }
+
+  checkTheCurrentMark(numberObject, numberState) {
+    return this.palindromTabelExample[numberObject][numberState].valueState;
+  }
+
+  setEmptySignInASpecificPlace(position) {
+    String.prototype.replace =
+      function (index, replacement) {
+        return this.substr(0, index) + replacement + this.substr(index + replacement.length);
+      };
+    this.copyOfWord = this.copyOfWord.replace(position, this.emptySign);
+    this.wordToCheck = this.wordToCheck.replace(position, this.emptySign);
   }
 
   initializerOfTableState() {

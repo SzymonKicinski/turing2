@@ -3,7 +3,7 @@ import { DropDownMe } from './Interfaces/DropDown';
 import { State } from './Interfaces/State';
 import { ClassAlphabet } from './Class/ClassAlphabet';
 import { Alphabet } from './Interfaces/Alphabet';
-import { Component, OnInit, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, AfterViewInit, AfterContentInit } from '@angular/core';
 import { preserveWhitespacesDefault } from '@angular/compiler';
 
 @Component({
@@ -11,8 +11,7 @@ import { preserveWhitespacesDefault } from '@angular/compiler';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent implements OnInit, AfterViewInit {
-
+export class AppComponent implements OnInit, AfterViewInit, AfterContentInit {
   blogPostSearchResults = [{}];
   initTestTabelMT = [];
 
@@ -58,7 +57,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   numberOfState = new Array();
   valueNumberOfState = 4;
 
-  word = 'abba';
+  wordToCheck = '';
 
   // Empty sign
   emptySign = '#';
@@ -117,15 +116,21 @@ export class AppComponent implements OnInit, AfterViewInit {
     // object = 0;
   }
 
+  ngAfterContentInit(): void {
+    this.alfabet = this.wordToCheck;
+    this.displayAlphabet.letter = this.alfabet.split('');
+    this.initializerOfTableState();
+  }
+
   isPalindrom() {
     // this.tableState
     debugger;
     // Check first sign
-    this.word.charAt(0);
+    // this.word.charAt(0);
 
-    for (let c = this.word.length; c >= 0; c--) {
-      // Dupa
-    }
+    // for (let c = this.word.length; c >= 0; c--) {
+    //   // Dupa
+    // }
 
   }
 

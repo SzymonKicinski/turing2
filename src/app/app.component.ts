@@ -1,3 +1,5 @@
+import { TapeField } from './Class/TapeField';
+import { Tape } from './Class/Tape';
 import { SelectItem } from 'primeng/components/common/selectitem';
 import { DropDownMe } from './Interfaces/DropDown';
 import { State } from './Interfaces/State';
@@ -19,8 +21,11 @@ export class AppComponent implements OnInit, AfterViewInit, AfterContentInit {
   // Word
   copyOfWord = '';
   wordToCheck = '';
+  // Tape ##################################
+  tape: any;
 
   constructor() {
+    this.tape = new Tape();
     this.displayAlphabet.letter = this.alfabet.split('');
   }
   title = 'Turing';
@@ -69,7 +74,7 @@ export class AppComponent implements OnInit, AfterViewInit, AfterContentInit {
   setBackgroundColorValue = '';
 
   // alfabet: String = ['a','b','c','d','e'];
-  alfabet: String = '#ab';
+  alfabet: String = '#as ';
   displayAlphabet: Alphabet = new ClassAlphabet(
     null
   );
@@ -317,50 +322,12 @@ export class AppComponent implements OnInit, AfterViewInit, AfterContentInit {
     this.counterForAllMoves++;
   }
 
-  oneMove(oneMove: number) {
-    debugger;
-    if (this.counterForOneMove === 0  ) {
-      // Weź pierwszy znak
-      let mark = this.getTheSignFromTheWord(this.counterForOneMove);
-      // Znajdź znak w stanie 0 i go aktywuj
-      let activeObject = this.findSignInStateQn(0, this.palindromTabelExample, mark);
-      this.setTrueOnOneActiveNow(activeObject.object, activeObject.state);
-      this.setTrueOnOneActiveState(activeObject.state);
-      console.log(activeObject);
-      this.setEmptySignInASpecificPlace(this.counterForOneMove , activeObject.celka.valueState);
-    } else {
-      // let activeObject = this.findActiveNowInTable(this.palindromTabelExample);
-      // this.setFalseOnAllActiveNow();
-      // this.setFalseOnAllActiveState();
-      // // this.setTrueOnOneActiveNow(activeObject.celka)
-      // this.setTrueOnOneActiveNow(activeObject.object, activeObject.state);
-      // this.setTrueOnOneActiveState(activeObject.state);
-    }
-    
-
-
-
-
-    // let activeObject = this.findActiveNowInTable(this.palindromTabelExample);
-    // console.log(activeObject);
-    // this.setTrueOnOneActiveNow(activeObject.object, activeObject.state);
-
-
-    // let mark = this.getTheSignFromTheWord(this.counterForOneMove);
-    // this.setEmptySignInASpecificPlace(this.counterForOneMove);
-    // console.log(mark);
-    // for (let object = 0; object < this.palindromTabelExample.length; object++) {
-    //   for (let state = 0; state < this.displayAlphabet.letter.length; state++) {
-    //     // Itereuje w stanie po obiektach.  a - q0  b - q0  c - q0
-    //     if (mark === this.palindromTabelExample[state][object].valueState) {
-    //       console.log(this.palindromTabelExample[object][state]);
-    //     }
-    //   }
-    //   // sign = this.wordToCheck.charAt(wordSign);
-    //   // this.setTrueOnOneActiveState(wordSign, 1);
-    //   // this.setEmptySignInASpecificPlace(0);
+  oneMove() {
+    // debugger;
+    // for (let x = 0; x < this.tape.length; x++) {
+    //   let sign = this.tape[x];
+    //   console.log(sign);
     // }
-    this.counterForOneMove = this.counterForOneMove + oneMove;
   }
 
   setFalseOnAllActiveState() {
@@ -405,7 +372,6 @@ export class AppComponent implements OnInit, AfterViewInit, AfterContentInit {
 
   findSignInStateQn(stateNumber: any, tabel: any, mark: any) {
     for (let object = 0; object < this.displayAlphabet.letter.length; object++) {
-      debugger;
       if (this.displayAlphabet.letter[object] === mark) {
         return ({
           celka: tabel[object][stateNumber],
@@ -442,9 +408,95 @@ export class AppComponent implements OnInit, AfterViewInit, AfterContentInit {
     //     return this.substr(0, index) + replacement + this.substr(index + replacement.length);
     //   };
     debugger;
-    this.copyOfWord = this.copyOfWord.
     this.copyOfWord = this.copyOfWord.replace(position, mark);
     this.wordToCheck = this.wordToCheck.replace(position, mark);
+  }
+
+  createTapeFromWord() {
+    let tempField = new TapeField();
+    debugger;
+    tempField.next = null;
+    tempField.prev = null;
+    tempField.value = this.wordToCheck.charAt(0);
+    // this.tape.currentElement.value = this.wordToCheck.charAt(0);
+    // this.tape.currentElement.next = null;
+    // this.tape.currentElement.prev = null;
+    this.tape.currentElement = tempField;
+    console.log(this.tape);
+    let tempString = ''
+    for (let i = 1; i < this.wordToCheck.length; i++) {
+      if (this.tape.currentElement.next === null) {
+        let tempField = new TapeField();
+        tempField.value = this.wordToCheck.charAt(i);
+        tempField.next = null;
+        tempField.prev = this.tape.currentElement.next;
+        this.tape.currentElement.next = tempField;
+      } else if (this.tape.currentElement.next.next === null) {
+        // } else if (this.tape.currentElement.next.hasOwnProperty('next') ) {
+        let tempField2 = new TapeField();
+        tempField2.value = this.wordToCheck.charAt(i);
+        tempField2.next = null;
+        tempField2.prev = this.tape.currentElement.prev;
+        this.tape.currentElement.next.next = tempField2;
+      } else if (this.tape.currentElement.next.next.next === null) {
+        // } else if (this.tape.currentElement.next.hasOwnProperty('next') ) {
+        let tempField2 = new TapeField();
+        tempField2.value = this.wordToCheck.charAt(i);
+        tempField2.next = null;
+        tempField2.prev = this.tape.currentElement.prev;
+        this.tape.currentElement.next.next.next = tempField2;
+      } else if (this.tape.currentElement.next.next.next.next === null) {
+        // } else if (this.tape.currentElement.next.hasOwnProperty('next') ) {
+        let tempField2 = new TapeField();
+        tempField2.value = this.wordToCheck.charAt(i);
+        tempField2.next = null;
+        tempField2.prev = this.tape.currentElement.prev;
+        this.tape.currentElement.next.next.next.next = tempField2;
+      } else if (this.tape.currentElement.next.next.next.next.next === null) {
+        // } else if (this.tape.currentElement.next.hasOwnProperty('next') ) {
+        let tempField2 = new TapeField();
+        tempField2.value = this.wordToCheck.charAt(i);
+        tempField2.next = null;
+        tempField2.prev = this.tape.currentElement.prev;
+        this.tape.currentElement.next.next.next.next.next.next = tempField2;
+      } else if (this.tape.currentElement.next.next.next.next.next.next === null) {
+        // } else if (this.tape.currentElement.next.hasOwnProperty('next') ) {
+        let tempField2 = new TapeField();
+        tempField2.value = this.wordToCheck.charAt(i);
+        tempField2.next = null;
+        tempField2.prev = this.tape.currentElement.prev;
+        this.tape.currentElement.next.next.next.next.next.next.next = tempField2;
+      } else if (this.tape.currentElement.next.next.next.next.next.next.next === null) {
+        // } else if (this.tape.currentElement.next.hasOwnProperty('next') ) {
+        let tempField2 = new TapeField();
+        tempField2.value = this.wordToCheck.charAt(i);
+        tempField2.next = null;
+        tempField2.prev = this.tape.currentElement.prev;
+        this.tape.currentElement.next.next.next.next.next.next.next = tempField2;
+      }
+
+      // Object.keys(this.tape.currentElement).forEach(function (key, index) {
+      //   debugger;
+      //   console.log(`key`);
+      //   console.log(key.valueOf());
+      //   console.log(`index`);
+      //   console.log(index);
+      //   if (key.next === null) {
+      //     let tempField2 = new TapeField();
+      //     tempField2.value = this.wordToCheck.charAt(1);
+      //     tempField2.next = null;
+      //     tempField2.prev = this.tape.currentElement.next;
+      //     this.tape.currentElement.next = tempField2;
+      //   }
+      // });
+    }
+  }
+
+
+
+  insertWord() {
+    this.copyOfWord = this.wordToCheck;
+    this.createTapeFromWord();
   }
 
 
@@ -452,7 +504,6 @@ export class AppComponent implements OnInit, AfterViewInit, AfterContentInit {
     this.counterForOneMove = 0;
     this.counterForAllMoves = 0;
     // this.or.rows[0].cells[2].innerHTML = 'dupa';
-
     // Creating an object to the tabel
     // debugger;
     this.initTestTabelMT = [];

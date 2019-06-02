@@ -20,8 +20,8 @@
       </div>
 
       <div class="is-widescreen">
-        <a class="button is-white" (click)="isPalindrom()">Insert</a>
-        <input #word class="input" type="text" placeholder="Insert word" [(ngModel)]="wordToCheck"
+        <a class="button is-white" (click)="insertWord()">Insert</a>
+        <input maxlength="7" #word class="input" type="text" placeholder="Insert word" [(ngModel)]="wordToCheck"
           style="width: 120px; height: 40px; text-align: left">
         Insert the word to check if it's a palindrome (exp.<strong>"abba"</strong>).
       </div>
@@ -119,7 +119,7 @@
 </div>
 <div #sendTheTabel class="contorl">
   <button class="button is-primary" (click)="isPalindrom()">All</button>
-  <button class="button is-primary" (click)="oneMove(1)">Next</button>
+  <button class="button is-primary" (click)="oneMove()">Next</button>
 </div>
 
 

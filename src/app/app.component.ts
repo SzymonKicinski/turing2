@@ -59,7 +59,9 @@ export class AppComponent implements OnInit, AfterViewInit, AfterContentInit {
   // Number of State
   numberOfState = new Array();
   valueNumberOfState = 6;
-
+  // Counters
+  counterForOneMove = 0;
+  counterForAllMoves = 0;
 
   // Empty sign
   emptySign = '#';
@@ -294,23 +296,71 @@ export class AppComponent implements OnInit, AfterViewInit, AfterContentInit {
   }
 
   isPalindrom() {
-    debugger;
     this.copyOfWord = this.wordToCheck;
     // Check first sign
     // this.word.charAt(0);
-    for (let object = 0; object < this.palindromTabelExample.length; object++) {
-      for (let state = 0; state < this.palindromTabelExample.length; state++) {
-        let mark = this.checkTheCurrentMark(object, state);
-      }
-      // sign = this.wordToCheck.charAt(wordSign);
-      // this.setTrueOnOneActiveState(wordSign, 1);
-      // this.setEmptySignInASpecificPlace(0);
-    }
+    // for (let object = 0; object < this.palindromTabelExample.length; object++) {
+    //   for (let state = 0; state < this.stateColumn.length; state++) {
+
+    //     let mark = this.getTheSignFromTheWord(this.counterForAllMoves);
+    //     console.log(mark);
+
+    //   }
+    //   // sign = this.wordToCheck.charAt(wordSign);
+    //   // this.setTrueOnOneActiveState(wordSign, 1);
+    //   // this.setEmptySignInASpecificPlace(0);
+    // }
 
     // for (let c = this.word.length; c >= 0; c--) {
     //   // Dupa
     // }
+    this.counterForAllMoves++;
+  }
 
+  oneMove(oneMove: number) {
+    debugger;
+    if (this.counterForOneMove === 0  ) {
+      // Weź pierwszy znak
+      let mark = this.getTheSignFromTheWord(this.counterForOneMove);
+      // Znajdź znak w stanie 0 i go aktywuj
+      let activeObject = this.findSignInStateQn(0, this.palindromTabelExample, mark);
+      this.setTrueOnOneActiveNow(activeObject.object, activeObject.state);
+      this.setTrueOnOneActiveState(activeObject.state);
+      console.log(activeObject);
+      this.setEmptySignInASpecificPlace(this.counterForOneMove , activeObject.celka.valueState);
+    } else {
+      // let activeObject = this.findActiveNowInTable(this.palindromTabelExample);
+      // this.setFalseOnAllActiveNow();
+      // this.setFalseOnAllActiveState();
+      // // this.setTrueOnOneActiveNow(activeObject.celka)
+      // this.setTrueOnOneActiveNow(activeObject.object, activeObject.state);
+      // this.setTrueOnOneActiveState(activeObject.state);
+    }
+    
+
+
+
+
+    // let activeObject = this.findActiveNowInTable(this.palindromTabelExample);
+    // console.log(activeObject);
+    // this.setTrueOnOneActiveNow(activeObject.object, activeObject.state);
+
+
+    // let mark = this.getTheSignFromTheWord(this.counterForOneMove);
+    // this.setEmptySignInASpecificPlace(this.counterForOneMove);
+    // console.log(mark);
+    // for (let object = 0; object < this.palindromTabelExample.length; object++) {
+    //   for (let state = 0; state < this.displayAlphabet.letter.length; state++) {
+    //     // Itereuje w stanie po obiektach.  a - q0  b - q0  c - q0
+    //     if (mark === this.palindromTabelExample[state][object].valueState) {
+    //       console.log(this.palindromTabelExample[object][state]);
+    //     }
+    //   }
+    //   // sign = this.wordToCheck.charAt(wordSign);
+    //   // this.setTrueOnOneActiveState(wordSign, 1);
+    //   // this.setEmptySignInASpecificPlace(0);
+    // }
+    this.counterForOneMove = this.counterForOneMove + oneMove;
   }
 
   setFalseOnAllActiveState() {
@@ -339,6 +389,35 @@ export class AppComponent implements OnInit, AfterViewInit, AfterContentInit {
     }
   }
 
+  findActiveNowInTable(tabel: any) {
+    for (let object = 0; object < tabel.length; object++) {
+      for (let state = 0; state < this.displayAlphabet.letter.length; state++) {
+        if (tabel[object][state].activeNow === true) {
+          return ({
+            celka: tabel[object][state],
+            object: object,
+            state: state
+          });
+        }
+      }
+    }
+  }
+
+  findSignInStateQn(stateNumber: any, tabel: any, mark: any) {
+    for (let object = 0; object < this.displayAlphabet.letter.length; object++) {
+      debugger;
+      if (this.displayAlphabet.letter[object] === mark) {
+        return ({
+          celka: tabel[object][stateNumber],
+          object: object,
+          state: stateNumber
+        });
+      }
+    }
+  }
+
+
+
   setTrueOnOneActiveNow(numberObject, numberState) {
     this.palindromTabelExample[numberObject][numberState].activeNow = true;
   }
@@ -349,20 +428,29 @@ export class AppComponent implements OnInit, AfterViewInit, AfterContentInit {
     }
   }
 
-  checkTheCurrentMark(numberObject, numberState) {
+  checkTheCurrentMarkInTable(numberObject, numberState) {
     return this.palindromTabelExample[numberObject][numberState].valueState;
   }
 
-  setEmptySignInASpecificPlace(position) {
-    String.prototype.replace =
-      function (index, replacement) {
-        return this.substr(0, index) + replacement + this.substr(index + replacement.length);
-      };
-    this.copyOfWord = this.copyOfWord.replace(position, this.emptySign);
-    this.wordToCheck = this.wordToCheck.replace(position, this.emptySign);
+  getTheSignFromTheWord(v: number) {
+    return this.wordToCheck.charAt(v);
   }
 
+  setEmptySignInASpecificPlace(position, mark) {
+    // String.prototype.replace =
+    //   function (index, replacement) {
+    //     return this.substr(0, index) + replacement + this.substr(index + replacement.length);
+    //   };
+    debugger;
+    this.copyOfWord = this.copyOfWord.
+    this.copyOfWord = this.copyOfWord.replace(position, mark);
+    this.wordToCheck = this.wordToCheck.replace(position, mark);
+  }
+
+
   initializerOfTableState() {
+    this.counterForOneMove = 0;
+    this.counterForAllMoves = 0;
     // this.or.rows[0].cells[2].innerHTML = 'dupa';
 
     // Creating an object to the tabel
@@ -426,6 +514,8 @@ export class AppComponent implements OnInit, AfterViewInit, AfterContentInit {
 
   // Alphabet
   createDisplayAlphabet(): any {
+    this.counterForOneMove = 0;
+    this.counterForAllMoves = 0;
     this.numberOfState = new Array();
     for (let i = 0; i <= this.displayAlphabet.letter.length; i++) {
       this.ValueState.push(
@@ -467,8 +557,6 @@ export class AppComponent implements OnInit, AfterViewInit, AfterContentInit {
     } else {
       alert('The number of state it isnt the number!');
     }
-
-
   }
 }
 

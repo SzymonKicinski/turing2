@@ -9,6 +9,7 @@ export class Tape {
         if (this.currentElement.next === null) {
             this.currentElement.next = new TapeField();
             this.currentElement.next.prev = this.currentElement;
+        } else {
             this.currentElement = this.currentElement.next;
         }
     }
@@ -17,6 +18,7 @@ export class Tape {
         if (this.currentElement.prev === null) {
             this.currentElement.prev = new TapeField();
             this.currentElement.prev.next = this.currentElement;
+        } else {
             this.currentElement = this.currentElement.prev;
         }
     }

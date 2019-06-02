@@ -7,6 +7,7 @@ import { ClassAlphabet } from './Class/ClassAlphabet';
 import { Alphabet } from './Interfaces/Alphabet';
 import { Component, OnInit, ViewChild, ElementRef, AfterViewInit, AfterContentInit } from '@angular/core';
 import { preserveWhitespacesDefault } from '@angular/compiler';
+import { isDefined } from '@angular/compiler/src/util';
 
 @Component({
   selector: 'app-root',
@@ -23,6 +24,15 @@ export class AppComponent implements OnInit, AfterViewInit, AfterContentInit {
   wordToCheck = '';
   // Tape ##################################
   tape: any;
+
+  // First State
+  firstState = true;
+  // Current obecjt
+  currentObject: {
+    celka: any;
+    object: number;
+    state: any;
+  };
 
   constructor() {
     this.tape = new Tape();
@@ -74,7 +84,7 @@ export class AppComponent implements OnInit, AfterViewInit, AfterContentInit {
   setBackgroundColorValue = '';
 
   // alfabet: String = ['a','b','c','d','e'];
-  alfabet: String = '#as ';
+  alfabet: String = '#ab ';
   displayAlphabet: Alphabet = new ClassAlphabet(
     null
   );
@@ -323,11 +333,27 @@ export class AppComponent implements OnInit, AfterViewInit, AfterContentInit {
   }
 
   oneMove() {
-    // debugger;
-    // for (let x = 0; x < this.tape.length; x++) {
-    //   let sign = this.tape[x];
-    //   console.log(sign);
-    // }
+    let acceptationState = false;
+    let noAcceptationState = false;
+
+    while (acceptationState === false || noAcceptationState === false) {
+      debugger;
+      // Sprawdź symbol na taśmie
+      let currentElement = this.checkSignOnTheTape();
+
+      if (this.firstState === true) {
+        this.currentObject = this.findSignInStateQn(0, this.palindromTabelExample, currentElement.value);
+        this.firstState = false;
+      } else {
+        this.currentObject = this.findSignInStateQn(this.currentObject.state, this.palindromTabelExample, currentElement.value);
+      }
+      this.setTrueOnOneActiveNow(this.currentObject.object, this.currentObject.state);
+      break;
+    }
+  }
+
+  checkSignOnTheTape() {
+    return this.tape.currentElement;
   }
 
   setFalseOnAllActiveState() {
@@ -413,82 +439,24 @@ export class AppComponent implements OnInit, AfterViewInit, AfterContentInit {
   }
 
   createTapeFromWord() {
-    let tempField = new TapeField();
-    debugger;
-    tempField.next = null;
-    tempField.prev = null;
-    tempField.value = this.wordToCheck.charAt(0);
-    // this.tape.currentElement.value = this.wordToCheck.charAt(0);
-    // this.tape.currentElement.next = null;
-    // this.tape.currentElement.prev = null;
-    this.tape.currentElement = tempField;
-    console.log(this.tape);
-    let tempString = ''
-    for (let i = 1; i < this.wordToCheck.length; i++) {
-      if (this.tape.currentElement.next === null) {
-        let tempField = new TapeField();
-        tempField.value = this.wordToCheck.charAt(i);
-        tempField.next = null;
-        tempField.prev = this.tape.currentElement.next;
-        this.tape.currentElement.next = tempField;
-      } else if (this.tape.currentElement.next.next === null) {
-        // } else if (this.tape.currentElement.next.hasOwnProperty('next') ) {
-        let tempField2 = new TapeField();
-        tempField2.value = this.wordToCheck.charAt(i);
-        tempField2.next = null;
-        tempField2.prev = this.tape.currentElement.prev;
-        this.tape.currentElement.next.next = tempField2;
-      } else if (this.tape.currentElement.next.next.next === null) {
-        // } else if (this.tape.currentElement.next.hasOwnProperty('next') ) {
-        let tempField2 = new TapeField();
-        tempField2.value = this.wordToCheck.charAt(i);
-        tempField2.next = null;
-        tempField2.prev = this.tape.currentElement.prev;
-        this.tape.currentElement.next.next.next = tempField2;
-      } else if (this.tape.currentElement.next.next.next.next === null) {
-        // } else if (this.tape.currentElement.next.hasOwnProperty('next') ) {
-        let tempField2 = new TapeField();
-        tempField2.value = this.wordToCheck.charAt(i);
-        tempField2.next = null;
-        tempField2.prev = this.tape.currentElement.prev;
-        this.tape.currentElement.next.next.next.next = tempField2;
-      } else if (this.tape.currentElement.next.next.next.next.next === null) {
-        // } else if (this.tape.currentElement.next.hasOwnProperty('next') ) {
-        let tempField2 = new TapeField();
-        tempField2.value = this.wordToCheck.charAt(i);
-        tempField2.next = null;
-        tempField2.prev = this.tape.currentElement.prev;
-        this.tape.currentElement.next.next.next.next.next.next = tempField2;
-      } else if (this.tape.currentElement.next.next.next.next.next.next === null) {
-        // } else if (this.tape.currentElement.next.hasOwnProperty('next') ) {
-        let tempField2 = new TapeField();
-        tempField2.value = this.wordToCheck.charAt(i);
-        tempField2.next = null;
-        tempField2.prev = this.tape.currentElement.prev;
-        this.tape.currentElement.next.next.next.next.next.next.next = tempField2;
-      } else if (this.tape.currentElement.next.next.next.next.next.next.next === null) {
-        // } else if (this.tape.currentElement.next.hasOwnProperty('next') ) {
-        let tempField2 = new TapeField();
-        tempField2.value = this.wordToCheck.charAt(i);
-        tempField2.next = null;
-        tempField2.prev = this.tape.currentElement.prev;
-        this.tape.currentElement.next.next.next.next.next.next.next = tempField2;
+    for (let i = 0; i < this.wordToCheck.length; i++) {
+      debugger;
+      // if (this.tape.currentElement.prev === null) {
+      //   this.tape.MoveNext();
+      // }
+      if ( i === 0 ) {
+        this.tape.currentElement = new TapeField();
       }
-
-      // Object.keys(this.tape.currentElement).forEach(function (key, index) {
-      //   debugger;
-      //   console.log(`key`);
-      //   console.log(key.valueOf());
-      //   console.log(`index`);
-      //   console.log(index);
-      //   if (key.next === null) {
-      //     let tempField2 = new TapeField();
-      //     tempField2.value = this.wordToCheck.charAt(1);
-      //     tempField2.next = null;
-      //     tempField2.prev = this.tape.currentElement.next;
-      //     this.tape.currentElement.next = tempField2;
-      //   }
-      // });
+      if (this.tape.currentElement.next === null) {
+        this.tape.currentElement.value = this.wordToCheck.charAt(i);
+        this.tape.MoveNext();
+      } else {
+        this.tape.MoveNext();
+        this.tape.currentElement.value = this.wordToCheck.charAt(i);
+        this.tape.MoveNext();
+      }
+      console.log(`tape`);
+      console.log(this.tape);
     }
   }
 

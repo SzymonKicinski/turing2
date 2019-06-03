@@ -116,7 +116,7 @@ export class AppComponent implements OnInit, AfterViewInit, AfterContentInit {
       3: {
         activeState: false,
         nextState: 0,
-        moveState: 'L',
+        moveState: 'P',
         valueState: '#',
         activeNow: false
       },
@@ -138,14 +138,14 @@ export class AppComponent implements OnInit, AfterViewInit, AfterContentInit {
         activeState: false,
         nextState: 6,
         moveState: '-',
-        valueState: 'A',
+        valueState: 'N',
         activeNow: false
       },
       7: {
         activeState: false,
         nextState: 7,
         moveState: '-',
-        valueState: 'N',
+        valueState: 'A',
         activeNow: false
       }
     },
@@ -196,14 +196,14 @@ export class AppComponent implements OnInit, AfterViewInit, AfterContentInit {
         activeState: false,
         nextState: 6,
         moveState: '-',
-        valueState: 'A',
+        valueState: 'N',
         activeNow: false
       },
       7: {
         activeState: false,
         nextState: 7,
         moveState: '-',
-        valueState: 'N',
+        valueState: 'A',
         activeNow: false
       }
     },
@@ -254,14 +254,14 @@ export class AppComponent implements OnInit, AfterViewInit, AfterContentInit {
         activeState: false,
         nextState: 6,
         moveState: '-',
-        valueState: 'A',
+        valueState: 'N',
         activeNow: false
       },
       7: {
         activeState: false,
         nextState: 7,
         moveState: '-',
-        valueState: 'N',
+        valueState: 'A',
         activeNow: false
       }
     }
@@ -335,22 +335,104 @@ export class AppComponent implements OnInit, AfterViewInit, AfterContentInit {
   oneMove() {
     let acceptationState = false;
     let noAcceptationState = false;
-
-    while (acceptationState === false || noAcceptationState === false) {
+    let stop = false;
+    while (stop === false) {
       debugger;
       // Sprawdź symbol na taśmie
-      let currentElement = this.checkSignOnTheTape();
+      let currentSignFromTape = this.checkSignOnTheTape();
 
+      // Sprawdź czy znak pierwszy i pobierz dane
       if (this.firstState === true) {
-        this.currentObject = this.findSignInStateQn(0, this.palindromTabelExample, currentElement.value);
+        this.currentObject = this.findSignInStateQn(
+          0,
+          this.palindromTabelExample,
+          currentSignFromTape.value
+        );
         this.firstState = false;
-      } else {
-        this.currentObject = this.findSignInStateQn(this.currentObject.state, this.palindromTabelExample, currentElement.value);
+      } else if ( currentSignFromTape.value !== null ) {
+        this.currentObject = this.findSignInStateQn(
+          this.currentObject.celka.nextState,
+          this.palindromTabelExample,
+          currentSignFromTape.value
+        );
+      } else if ( currentSignFromTape.value === null ) {
+        this.currentObject = this.findSignInStateQn(
+          this.currentObject.celka.nextState,
+          this.palindromTabelExample,
+          '#'
+        );
       }
+
+      // Zerowanie podświetleń
+      this.setFalseOnAllActiveNow();
+      this.setFalseOnAllActiveState();
+
+      // Podświetlenie aktualnego stanu
+      this.setTrueOnOneActiveState(this.currentObject.state);
+      // Podświetlenie aktualnej celki
       this.setTrueOnOneActiveNow(this.currentObject.object, this.currentObject.state);
+      // Praca na danych z celki.
+
+      // Wpisanie znaku z celki na taśmę
+      let s = 0;
+      for (s = 0; s < this.wordToCheck.length; s++) {
+        // Znalezeinie znaku w wordToCheck
+        if ( this.currentObject.celka.valueState === currentSignFromTape.value) {
+          console.log(`this.currentObject.celka.valueState === currentSignFromTape.value`);
+        } else if (this.wordToCheck[s] === currentSignFromTape.value) {
+          let newStr = '';
+          let i = 0;
+          for (i; i < s; i++) {
+            newStr += this.wordToCheck[s];
+          }
+          newStr += this.currentObject.celka.valueState;
+          if (i === 0) {
+            i++;
+          }
+          for (let y = i; y < this.wordToCheck.length; y++) {
+            newStr += this.wordToCheck[y];
+          }
+          this.wordToCheck = newStr;
+          this.copyOfWord = newStr;
+          // this.copyOfWord[s] = this.currentObject.celka.valueState;
+          console.log(`wordToCheck`);
+          console.log(this.wordToCheck);
+          console.log(`copyOfWord`);
+          console.log(this.copyOfWord);
+          s = this.wordToCheck.length;
+        }
+      }
+      // Wpisanie nowego znaku na taśmę
+      this.tape.currentElement.value = this.currentObject.celka.valueState;
+
+      // Ruch głowicy na taśmie
+      //    Zczytanie w którą strone głowica ma się ruszyć
+      if (this.currentObject.celka.moveState === 'P') { // Prawo
+        this.tape.MoveNext();
+      } else if (this.currentObject.celka.moveState === 'L') { // Lewo
+        this.tape.MovePrev();
+      }
+      // Przejście do stanu z celki
+      // Q0 a - Ruch do stanu Q1  -- np.
+
+
+      // Czy zakończyć
+      if (this.currentObject.celka.valueState === 'N') {
+        noAcceptationState = true;
+        stop = true;
+        alert(`It's not a palindrome`);
+        break;
+      }
+      if (this.currentObject.celka.valueState === 'A') {
+        acceptationState = true;
+        stop = true;
+        alert(`It's a palindrome`);
+        break;
+      }
       break;
     }
   }
+
 
   checkSignOnTheTape() {
     return this.tape.currentElement;
@@ -440,11 +522,7 @@ export class AppComponent implements OnInit, AfterViewInit, AfterContentInit {
 
   createTapeFromWord() {
     for (let i = 0; i < this.wordToCheck.length; i++) {
-      debugger;
-      // if (this.tape.currentElement.prev === null) {
-      //   this.tape.MoveNext();
-      // }
-      if ( i === 0 ) {
+      if (i === 0) {
         this.tape.currentElement = new TapeField();
       }
       if (this.tape.currentElement.next === null) {
@@ -457,6 +535,9 @@ export class AppComponent implements OnInit, AfterViewInit, AfterContentInit {
       }
       console.log(`tape`);
       console.log(this.tape);
+    }
+    for (let i = 0; i < this.wordToCheck.length; i++) {
+      this.tape.MovePrev();
     }
   }
 
@@ -576,6 +657,15 @@ export class AppComponent implements OnInit, AfterViewInit, AfterContentInit {
     } else {
       alert('The number of state it isnt the number!');
     }
+  }
+
+  reset() {
+    this.initializerOfTableState();
+    this.setFalseOnAllActiveNow();
+    this.setFalseOnAllActiveState();
+    this.wordToCheck = 'abba';
+    this.copyOfWord = 'abba';
+    this.createTapeFromWord();
   }
 }
 

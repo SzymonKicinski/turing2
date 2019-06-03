@@ -181,7 +181,7 @@ export class AppComponent implements OnInit, AfterViewInit, AfterContentInit {
       4: {
         activeState: false,
         nextState: 4,
-        moveState: '{',
+        moveState: 'P',
         valueState: 'a',
         activeNow: false
       },

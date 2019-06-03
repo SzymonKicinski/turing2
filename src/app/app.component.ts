@@ -280,28 +280,6 @@ export class AppComponent implements OnInit, AfterViewInit, AfterContentInit {
     ];
     this.initializerOfTableState();
     this.createDisplayAlphabet();
-
-    // For test no.1
-    // let object = 0;
-    // // creating tabel for operation
-    // this.initTestTabelMT.forEach(state => {
-    //   // debugger;
-    //   this.tableState[object] = [{}];
-    //   for (let propertas = 0; propertas < this.valueNumberOfState + 1; propertas++) {
-    //     const tempString = state[propertas];
-    //     this.tableState[object][propertas] = ({
-    //       nextState: tempString.state.substr(1, 1),
-    //       valueState: tempString.state.substr(3, 1),
-    //       moveState: tempString.state.substr(5, 1),
-    //       activeState: true
-    //     });
-    //   }
-    //   object++;
-    //   // debugger;
-    //   console.log(`this.tableState`);
-    //   console.log(this.tableState);
-    // });
-    // object = 0;
     this.didWasDone = false;
   }
 
@@ -312,23 +290,6 @@ export class AppComponent implements OnInit, AfterViewInit, AfterContentInit {
 
   isPalindrom() {
     this.copyOfWord = this.wordToCheck;
-    // Check first sign
-    // this.word.charAt(0);
-    // for (let object = 0; object < this.palindromTabelExample.length; object++) {
-    //   for (let state = 0; state < this.stateColumn.length; state++) {
-
-    //     let mark = this.getTheSignFromTheWord(this.counterForAllMoves);
-    //     console.log(mark);
-
-    //   }
-    //   // sign = this.wordToCheck.charAt(wordSign);
-    //   // this.setTrueOnOneActiveState(wordSign, 1);
-    //   // this.setEmptySignInASpecificPlace(0);
-    // }
-
-    // for (let c = this.word.length; c >= 0; c--) {
-    //   // Dupa
-    // }
     this.counterForAllMoves++;
   }
 
@@ -349,13 +310,13 @@ export class AppComponent implements OnInit, AfterViewInit, AfterContentInit {
           currentSignFromTape.value
         );
         this.firstState = false;
-      } else if ( currentSignFromTape.value !== null ) {
+      } else if (currentSignFromTape.value !== null) {
         this.currentObject = this.findSignInStateQn(
           this.currentObject.celka.nextState,
           this.palindromTabelExample,
           currentSignFromTape.value
         );
-      } else if ( currentSignFromTape.value === null ) {
+      } else if (currentSignFromTape.value === null) {
         this.currentObject = this.findSignInStateQn(
           this.currentObject.celka.nextState,
           this.palindromTabelExample,
@@ -375,22 +336,55 @@ export class AppComponent implements OnInit, AfterViewInit, AfterContentInit {
 
       // Wpisanie znaku z celki na taśmę
       let s = 0;
+      debugger;
       for (s = 0; s < this.wordToCheck.length; s++) {
         // Znalezeinie znaku w wordToCheck
-        if ( this.currentObject.celka.valueState === currentSignFromTape.value) {
+        if (this.currentObject.celka.valueState === currentSignFromTape.value) {
           console.log(`this.currentObject.celka.valueState === currentSignFromTape.value`);
         } else if (this.wordToCheck[s] === currentSignFromTape.value) {
           let newStr = '';
           let i = 0;
           for (i; i < s; i++) {
-            newStr += this.wordToCheck[s];
+            newStr += this.wordToCheck[i];
           }
           newStr += this.currentObject.celka.valueState;
           if (i === 0) {
             i++;
           }
-          for (let y = i; y < this.wordToCheck.length; y++) {
-            newStr += this.wordToCheck[y];
+          if (newStr.length !== this.wordToCheck.length) {
+            for (let y = i; y < this.wordToCheck.length; y++) {
+              if (newStr.length !== y) {
+                y++;
+              }
+              newStr += this.wordToCheck[y];
+            }
+          }
+
+          this.wordToCheck = newStr;
+          this.copyOfWord = newStr;
+          // this.copyOfWord[s] = this.currentObject.celka.valueState;
+          console.log(`wordToCheck`);
+          console.log(this.wordToCheck);
+          console.log(`copyOfWord`);
+          console.log(this.copyOfWord);
+          s = this.wordToCheck.length;
+        } else if (currentSignFromTape.value === '#') {
+          let newStr = '';
+          let i = 0;
+          for (i; i < s; i++) {
+            newStr += this.wordToCheck[i];
+          }
+          newStr += this.currentObject.celka.valueState;
+          if (i === 0) {
+            i++;
+          }
+          if (newStr.length !== this.wordToCheck.length) {
+            for (let y = i; y < this.wordToCheck.length; y++) {
+              if ( newStr.length !== y ) {
+                y++;
+              }
+              newStr += this.wordToCheck[y];
+            }
           }
           this.wordToCheck = newStr;
           this.copyOfWord = newStr;
